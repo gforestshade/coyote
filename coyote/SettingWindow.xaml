@@ -1,0 +1,173 @@
+﻿<Window x:Class="coyote.SettingWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:coyote"
+        mc:Ignorable="d"
+        Title="設定" ShowInTaskbar="False" WindowStartupLocation="CenterOwner" SizeToContent="WidthAndHeight" ResizeMode="NoResize" Topmost="True" FontSize="14">
+    <Window.Background>
+        <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlColorKey}}"/>
+    </Window.Background>
+    <Window.Resources>
+        <local:ExePathExistsConverter x:Key="ExePathExistsConverter" />
+        <local:PathExistsConverter x:Key="PathExistsConverter" />
+    </Window.Resources>
+
+    <StackPanel Margin="20">
+        <Expander Header="Cyberfront版" HorizontalAlignment="Left" Grid.RowSpan="3" VerticalAlignment="Top" IsExpanded="True">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="600"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Row="0" Grid.Column="0" Margin="0,-4,5,10" Content="BtS本体のexeファイル:" Height="25" Width="150" HorizontalContentAlignment="Right"/>
+                <Label Grid.Row="1" Grid.Column="0" Margin="0,-4,5,10"  Content="MODSフォルダ1:"  Height="25" Width="150" HorizontalContentAlignment="Right"/>
+                <Label Grid.Row="2" Grid.Column="0" Margin="0,-4,5,10"  Content="MODSフォルダ2:"  Height="25" Width="150" HorizontalContentAlignment="Right"/>
+
+                <TextBox Grid.Row="0" Grid.Column="1" MinHeight="25" Margin="0,0,8,10"
+                         Name="btsExePath" Text="{Binding Path1.BtsExePath, UpdateSourceTrigger=PropertyChanged}"
+                         VerticalContentAlignment="Center" TextWrapping="Wrap" />
+                <TextBox Grid.Row="1" Grid.Column="1" MinHeight="25" Margin="0,0,8,10"
+                         Name="btsModPath"  Text="{Binding Path1.BtsModsPath, UpdateSourceTrigger=PropertyChanged}"
+                         VerticalContentAlignment="Center" TextWrapping="Wrap"/>
+                <TextBox Grid.Row="2" Grid.Column="1" MinHeight="25" Margin="0,0,8,10"
+                         Name="usersModPath" Text="{Binding Path1.UsersModsPath, UpdateSourceTrigger=PropertyChanged}"
+                         VerticalContentAlignment="Center" TextWrapping="Wrap"/>
+                <Image Grid.Row="0" Grid.Column="2" Source="sozai_cman_jp_20180612153329.png" Height="16"  Margin="0,-3,10,10">
+                    <Image.Style>
+                        <Style TargetType="Image">
+                            <Setter Property="Visibility" Value="Hidden" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding BtsExePath, Converter={StaticResource ExePathExistsConverter}, ConverterParameter=Civ4BeyondSword.exe}" Value="false">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Image.Style>
+                </Image>
+                <Image Grid.Row="1" Grid.Column="2" Source="sozai_cman_jp_20180612153329.png" Height="16" Margin="0,-3,10,10">
+                    <Image.Style>
+                        <Style TargetType="Image">
+                            <Setter Property="Visibility" Value="Hidden" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding BtsModsPath, Converter={StaticResource PathExistsConverter}}" Value="false">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Image.Style>
+                </Image>
+                <Image Grid.Row="2" Grid.Column="2" Source="sozai_cman_jp_20180612153329.png" Height="16" Margin="0,-3,10,10">
+                    <Image.Style>
+                        <Style TargetType="Image">
+                            <Setter Property="Visibility" Value="Hidden" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding UsersModsPath, Converter={StaticResource PathExistsConverter}}" Value="false">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Image.Style>
+                </Image>
+
+                <Button Grid.Row="0" Grid.Column="3" Height="25" Click="BtsExeButton_Click" Margin="0,0,0,10">
+                    <Image Source="icons8-open-48.png" />
+                </Button>
+                <Button Grid.Row="1" Grid.Column="3" Height="25" IsEnabled="False" Margin="0,0,0,10">
+                </Button>
+                <Button Grid.Row="2" Grid.Column="3" Height="25" IsEnabled="False" Margin="0,0,0,10">
+                </Button>
+            </Grid>
+        </Expander>
+
+        <Border  BorderThickness="1" Margin="0,10" BorderBrush="#969696" />
+
+        <Expander Header="Steam版" HorizontalAlignment="Left" Grid.RowSpan="3" VerticalAlignment="Top" IsExpanded="True">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="600"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Row="0" Grid.Column="0" Margin="0,-4,5,10" Content="BtS本体のexeファイル:" Height="25" Width="150" HorizontalContentAlignment="Right"/>
+                <Label Grid.Row="1" Grid.Column="0" Margin="0,-4,5,10"  Content="MODSフォルダ1:"  Height="25" Width="150" HorizontalContentAlignment="Right"/>
+                <Label Grid.Row="2" Grid.Column="0" Margin="0,-4,5,10"  Content="MODSフォルダ2:"  Height="25" Width="150" HorizontalContentAlignment="Right"/>
+
+                <TextBox Grid.Row="0" Grid.Column="1" MinHeight="25" Margin="0,0,8,10"
+                         Name="steamBtsExePath" Text="{Binding Path2.BtsExePath, UpdateSourceTrigger=PropertyChanged}"
+                         VerticalContentAlignment="Center" TextWrapping="Wrap" />
+                <TextBox Grid.Row="1" Grid.Column="1" MinHeight="25" Margin="0,0,8,10"
+                         Name="steamBtsModPath"  Text="{Binding Path2.BtsModsPath, UpdateSourceTrigger=PropertyChanged}"
+                         VerticalContentAlignment="Center" TextWrapping="Wrap"/>
+                <TextBox Grid.Row="2" Grid.Column="1" MinHeight="25" Margin="0,0,8,10"
+                         Name="steamUsersModPath" Text="{Binding Path2.UsersModsPath, UpdateSourceTrigger=PropertyChanged}"
+                         VerticalContentAlignment="Center" TextWrapping="Wrap"/>
+                <Image Grid.Row="0" Grid.Column="2" Source="sozai_cman_jp_20180612153329.png" Height="16"  Margin="0,-3,10,10">
+                    <Image.Style>
+                        <Style TargetType="Image">
+                            <Setter Property="Visibility" Value="Hidden" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Path2.BtsExePath, Converter={StaticResource ExePathExistsConverter}, ConverterParameter=Civ4BeyondSword_japan.exe}" Value="false">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Image.Style>
+                </Image>
+                <Image Grid.Row="1" Grid.Column="2" Source="sozai_cman_jp_20180612153329.png" Height="16" Margin="0,-3,10,10">
+                    <Image.Style>
+                        <Style TargetType="Image">
+                            <Setter Property="Visibility" Value="Hidden" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Path2.BtsModsPath, Converter={StaticResource PathExistsConverter}}" Value="false">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Image.Style>
+                </Image>
+                <Image Grid.Row="2" Grid.Column="2" Source="sozai_cman_jp_20180612153329.png" Height="16" Margin="0,-3,10,10">
+                    <Image.Style>
+                        <Style TargetType="Image">
+                            <Setter Property="Visibility" Value="Hidden" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Path2.UsersModsPath, Converter={StaticResource PathExistsConverter}}" Value="false">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Image.Style>
+                </Image>
+
+                <Button Grid.Row="0" Grid.Column="3" Height="25" Click="SteamBtsExeButton_Click" Margin="0,0,0,10">
+                    <Image Source="icons8-open-48.png" />
+                </Button>
+                <Button Grid.Row="1" Grid.Column="3" Height="25" IsEnabled="False" Margin="0,0,0,10">
+                </Button>
+                <Button Grid.Row="2" Grid.Column="3" Height="25" IsEnabled="False" Margin="0,0,0,10">
+                </Button>
+            </Grid>
+        </Expander>
+        <StackPanel  Height="30" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button Content="設定" Width="100" Margin="15,0" />
+            <Button Content="OK" Width="100" Margin="15,0" IsDefault="True" Click="OK_Click" />
+            <Button Content="キャンセル" Width="100" Margin="15,0" IsCancel="True" Click="Cancel_Click" />
+        </StackPanel>
+    </StackPanel>
+</Window>
