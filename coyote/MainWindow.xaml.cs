@@ -40,22 +40,34 @@ namespace coyote
     /// </summary>
     public class Config : BindableBase
     {
-        private PathConfig path1;
+        private PathConfig _Path1;
         public PathConfig Path1
         {
-            get { return this.path1; }
-            set { this.SetProperty(ref this.path1, value); }
+            get { return this._Path1; }
+            set { this.SetProperty(ref this._Path1, value); }
         }
-        private PathConfig path2;
+        private PathConfig _Path2;
         public PathConfig Path2
         {
-            get { return this.path2; }
-            set { this.SetProperty(ref this.path2, value); }
+            get { return this._Path2; }
+            set { this.SetProperty(ref this._Path2, value); }
+        }
+        private int _GameKind;
+        public int GameKind
+        {
+            get { return this._GameKind; }
+            set { this.SetProperty(ref this._GameKind, value); }
+        }
+        private bool _TopMost;
+        public bool TopMost
+        {
+            get { return this._TopMost; }
+            set { this.SetProperty(ref this._TopMost, value); }
         }
 
         public Config Copy()
         {
-            return new Config { Path1 = this.Path1.Copy(), Path2 = this.path2.Copy() };
+            return new Config { Path1 = this.Path1.Copy(), Path2 = this.Path2.Copy() };
         }
     }
 
@@ -102,22 +114,21 @@ namespace coyote
             BtsExePath = exePath;
 
             var info = new FileInfo(BtsExePath);
-            if (info.Exists)
-            {
-                var dirMods = info.Directory.GetDirectories("MODS");
-                if (dirMods.Length == 1)
-                {
-                    BtsModsPath = dirMods[0].FullName;
-                }
+            if (!info.Exists) return;
 
-                var usersModsLnks = info.Directory.GetFiles("_Civ4CustomMods.lnk");
-                if (usersModsLnks.Length == 1)
-                {
-                    // ショートカットを辿る
-                    var shell = new IWshRuntimeLibrary.WshShell();
-                    var shortcut = (IWshRuntimeLibrary.IWshShortcut)shell.CreateShortcut(usersModsLnks[0].FullName);
-                    UsersModsPath = shortcut.TargetPath.ToString();
-                }
+            var dirMods = info.Directory.GetDirectories("MODS");
+            if (dirMods.Length == 1)
+            {
+                BtsModsPath = dirMods[0].FullName;
+            }
+
+            var usersModsLnks = info.Directory.GetFiles("_Civ4CustomMods.lnk");
+            if (usersModsLnks.Length == 1)
+            {
+                // ショートカットを辿る
+                var shell = new IWshRuntimeLibrary.WshShell();
+                var shortcut = (IWshRuntimeLibrary.IWshShortcut)shell.CreateShortcut(usersModsLnks[0].FullName);
+                UsersModsPath = shortcut.TargetPath.ToString();
             }
         }
 
@@ -199,14 +210,19 @@ namespace coyote
 
         public PathConfig CurrentPathConfig { get; private set; }
 
-        public Config config;
+        public Config config { get; set; }
 
         public MainWindow()
         {
             Properties.Settings.Default.Reload();
             if (Properties.Settings.Default.MyConfig == null)
             {
-                Properties.Settings.Default.MyConfig = new Config { Path1 = PathConfig.Default, Path2 = PathConfig.Steam };
+                Properties.Settings.Default.MyConfig = new Config {
+                    Path1 = PathConfig.Default,
+                    Path2 = PathConfig.Steam,
+                    TopMost = true,
+                    GameKind = 1,
+                };
             }
 
             config = Properties.Settings.Default.MyConfig;
@@ -216,6 +232,9 @@ namespace coyote
             DataContext = this;
 
             InitializeComponent();
+
+            gameKind.SelectedIndex = config.GameKind;
+            Topmost = config.TopMost;
 
             var cv = CollectionViewSource.GetDefaultView(mylist1);
             cv.Filter += MyList1_Filter;
@@ -232,7 +251,7 @@ namespace coyote
         {
             var item = dirList.SelectedItem as System.IO.DirectoryInfo;
             StartMod(item.Name);
-            this.Close();
+            SaveAndClose();
         }
 
         /// <summary>
@@ -265,7 +284,7 @@ namespace coyote
         /// <param name="e"></param>
         private void Cancel_Click(object sender, RoutedEventArgs e)
         {
-            this.Close();
+            SaveAndClose();
         }
 
         /// <summary>
@@ -278,7 +297,7 @@ namespace coyote
             if (dirList.SelectedItem is DirectoryInfo item)
             {
                 StartMod(item.Name);
-                this.Close();
+                SaveAndClose();
             }
         }
 
@@ -333,7 +352,7 @@ namespace coyote
         private void OpenVanilla_Click(object sender, RoutedEventArgs e)
         {
             StartMod("");
-            this.Close();
+            SaveAndClose();
         }
 
         /// <summary>
@@ -446,6 +465,14 @@ namespace coyote
                 dirList.SelectedIndex = i;
                 dirList.ScrollIntoView(mylist1[i]);
             }
+        }
+
+        private void SaveAndClose()
+        {
+            config.GameKind = gameKind.SelectedIndex;
+            config.TopMost = Topmost;
+            Properties.Settings.Default.Save();
+            Close();
         }
     }
 }
