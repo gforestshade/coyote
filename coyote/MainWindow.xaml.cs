@@ -21,6 +21,9 @@ using System.ComponentModel;
 
 namespace coyote
 {
+    /// <summary>
+    /// バインド用基底クラス
+    /// </summary>
     public class BindableBase : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
@@ -28,16 +31,16 @@ namespace coyote
         {
             if (Equals(field, value)) { return false; }
             field = value;
-            var h = this.PropertyChanged;
-            if (h != null) { h(this, new PropertyChangedEventArgs(propertyName)); }
-            return true;
+            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName)); return true;
         }
     }
 
+    /// <summary>
+    /// 設定クラス
+    /// </summary>
     public class Config : BindableBase
     {
         private PathConfig path1;
-        [global::System.Configuration.UserScopedSettingAttribute()]
         public PathConfig Path1
         {
             get { return this.path1; }
@@ -56,6 +59,9 @@ namespace coyote
         }
     }
 
+    /// <summary>
+    /// BtSのありか・MODフォルダのありか管理クラス
+    /// </summary>
     public class PathConfig : BindableBase
     {
         private string _BtsExePath;
@@ -120,6 +126,9 @@ namespace coyote
 
     }
 
+    /// <summary>
+    /// メインのリストボックスに表示するコレクション
+    /// </summary>
     public class MyList1 : ObservableCollection<System.IO.DirectoryInfo>
     {
         public MyList1(PathConfig path)
@@ -148,6 +157,9 @@ namespace coyote
         }
     }
  
+    /// <summary>
+    /// 与えられた文字列がProgram FilesとUsersのどちらのMODフォルダなのか判別するコンバータ
+    /// </summary>
     public class ModPathConverter : IMultiValueConverter
     {
         public object Convert(object[] value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
@@ -211,14 +223,22 @@ namespace coyote
             searchText.Focus();
         }
 
-
-       private void ListBoxItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        /// <summary>
+        /// リストボックスの要素をダブルクリックしたとき
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ListBoxItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             var item = dirList.SelectedItem as System.IO.DirectoryInfo;
             StartMod(item.Name);
             this.Close();
         }
 
+        /// <summary>
+        /// MODを起動する
+        /// </summary>
+        /// <param name="modName">起動するMOD名 空白の場合MODなしで起動する</param>
         private void StartMod(string modName)
         {
             var exefileinfo = new System.IO.FileInfo(CurrentPathConfig.BtsExePath);
@@ -238,11 +258,21 @@ namespace coyote
             Process p = Process.Start(psInfo);
         }
 
+        /// <summary>
+        /// キャンセルボタンをクリックしたとき
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Cancel_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
         }
 
+        /// <summary>
+        /// 起動ボタンをクリックしたとき
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void OK_Click(object sender, RoutedEventArgs e)
         {
             if (dirList.SelectedItem is DirectoryInfo item)
@@ -252,6 +282,11 @@ namespace coyote
             }
         }
 
+        /// <summary>
+        /// 設定を開くボタンをクリックしたとき
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Config_Click(object sender, RoutedEventArgs e)
         {
             var dlg = new SettingWindow();
@@ -264,11 +299,19 @@ namespace coyote
             }
         }
 
+        /// <summary>
+        /// Civセットが変更されたとき
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void GameKind_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             SetCurrentPathFromCombobox();
         }
 
+        /// <summary>
+        /// コンボボックスの選択状態を読み取ってCurrentPathConfigを設定する
+        /// </summary>
         private void SetCurrentPathFromCombobox()
         {
             if (gameKind.SelectedIndex == 0)
@@ -282,12 +325,22 @@ namespace coyote
             mylist1.Reset(CurrentPathConfig);
         }
 
+        /// <summary>
+        /// バニラで開くボタンをクリックしたとき
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void OpenVanilla_Click(object sender, RoutedEventArgs e)
         {
             StartMod("");
             this.Close();
         }
 
+        /// <summary>
+        /// エクスプローラで開くボタンをクリックしたとき
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void OpenExplorer_Click(object sender, RoutedEventArgs e)
         {
             if (dirList.SelectedItem is System.IO.DirectoryInfo item)
@@ -296,6 +349,11 @@ namespace coyote
             }
         }
 
+        /// <summary>
+        /// コマンドプロンプトで開くボタンをクリックしたとき
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void OpenCmd_Click(object sender, RoutedEventArgs e)
         {
             if (dirList.SelectedItem is System.IO.DirectoryInfo item)
@@ -309,6 +367,11 @@ namespace coyote
             }
         }
 
+        /// <summary>
+        /// ソート順が変更されたとき
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void SortKind_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var cv = CollectionViewSource.GetDefaultView(mylist1);
@@ -328,6 +391,12 @@ namespace coyote
             }
         }
 
+        /// <summary>
+        /// テキストボックスの内容でリストボックスの要素をフィルタするときの
+        /// フィルタ判定メソッド
+        /// </summary>
+        /// <param name="obj">DirectoryInfo</param>
+        /// <returns>表示してよいならtrue</returns>
         private bool MyList1_Filter(object obj)
         {
             if (obj is DirectoryInfo info)
@@ -342,6 +411,11 @@ namespace coyote
             }
         }
 
+        /// <summary>
+        /// テキストボックスの内容が変更されたとき
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void searchText_TextChanged(object sender, TextChangedEventArgs e)
         {
             CollectionViewSource.GetDefaultView(mylist1).Refresh();
@@ -351,6 +425,11 @@ namespace coyote
             }
         }
 
+        /// <summary>
+        /// テキストボックスでキーが押されたとき
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void searchText_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Up)
