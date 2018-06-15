@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:coyote"
         Name="mainWindow"
-        mc:Ignorable="d" ResizeMode="CanResizeWithGrip" ShowInTaskbar="True" Topmost="True" Width="700" FontSize="14">
+        mc:Ignorable="d" ResizeMode="CanResizeWithGrip" ShowInTaskbar="True" Topmost="True" Width="700" FontSize="14" Title="こやLauncher">
     <Window.Background>
         <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlLightColorKey}}"/>
     </Window.Background>

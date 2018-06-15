@@ -7,7 +7,7 @@
     <ProjectGuid>{B6B875CC-6F3D-4AF8-A740-613E73CADCBF}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>coyote</RootNamespace>
-    <AssemblyName>YetAnotherCivModChooser</AssemblyName>
+    <AssemblyName>KoyaLauncher</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -35,6 +35,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>koya.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -120,6 +123,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="icons8-cmd-50.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="koya.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
